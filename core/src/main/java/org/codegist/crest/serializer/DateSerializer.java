@@ -27,6 +27,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * @author Laurent Gilles (laurent.gilles@codegist.org)
@@ -53,6 +54,7 @@ public class DateSerializer implements Serializer<Date> {
         } catch (IllegalArgumentException e) {
             formatType = null;
             formatter = new SimpleDateFormat(dateFormat);
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         }
         this.formatter = formatter;
         this.formatType = formatType;
