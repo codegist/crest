@@ -216,7 +216,7 @@ public class CRestBuilder {
         }else if("basic".equals(auth)) {
             return buildBasicAuthorization();
         }else{
-            return null;
+            return (Authorization) crestProperties.get(Authorization.class.getName());
         }
     }
 
