@@ -23,9 +23,9 @@ package org.codegist.crest.serializer.jackson;
 import org.codegist.crest.CRestConfig;
 import org.codegist.crest.NonInstanciableClassTest;
 import org.codegist.crest.test.util.CRestConfigs;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -61,26 +61,22 @@ public class JacksonFactoryTest extends NonInstanciableClassTest {
     public void shouldCreateAnObjectMapperWithDefaultConfig(){
         ObjectMapper actual = JacksonFactory.createObjectMapper(mockCRestConfig, getClass());
         assertNotNull(actual);
-        assertFalse(actual.getDeserializationConfig().isEnabled(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES));
+        assertFalse(actual.getDeserializationConfig().isEnabled(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES));
     }
 
     @Test
     public void shouldCreateAnObjectMapperWithGivenConfig(){
-        Map<DeserializationConfig.Feature, Boolean> deserialization = new HashMap<DeserializationConfig.Feature, Boolean>();
-        Map<SerializationConfig.Feature, Boolean> serialization = new HashMap<SerializationConfig.Feature, Boolean>();
-        deserialization.put(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-        deserialization.put(DeserializationConfig.Feature.AUTO_DETECT_SETTERS, false);
-        serialization.put(SerializationConfig.Feature.AUTO_DETECT_IS_GETTERS, false);
-        serialization.put(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
+        Map<DeserializationFeature, Boolean> deserialization = new HashMap<DeserializationFeature, Boolean>();
+        Map<SerializationFeature, Boolean> serialization = new HashMap<SerializationFeature, Boolean>();
+        deserialization.put(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        serialization.put(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
         when(mockCRestConfig.get(eq(JacksonFactoryTest.class.getName() + JacksonFactory.JACKSON_DESERIALIZER_CONFIG), any(Object.class))).thenReturn(deserialization);
         when(mockCRestConfig.get(eq(JacksonFactoryTest.class.getName() + JacksonFactory.JACKSON_SERIALIZER_CONFIG), any(Object.class))).thenReturn(serialization);
 
         ObjectMapper actual = JacksonFactory.createObjectMapper(mockCRestConfig, getClass());
         assertNotNull(actual);
-        assertTrue(actual.getDeserializationConfig().isEnabled(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES));
-        assertFalse(actual.getDeserializationConfig().isEnabled(DeserializationConfig.Feature.AUTO_DETECT_SETTERS));
-        assertFalse(actual.getSerializationConfig().isEnabled(SerializationConfig.Feature.AUTO_DETECT_IS_GETTERS));
-        assertFalse(actual.getSerializationConfig().isEnabled(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS));
+        assertTrue(actual.getDeserializationConfig().isEnabled(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES));
+        assertFalse(actual.getSerializationConfig().isEnabled(SerializationFeature.FAIL_ON_EMPTY_BEANS));
     }
 }

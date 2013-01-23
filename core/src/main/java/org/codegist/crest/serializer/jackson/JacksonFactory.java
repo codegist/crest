@@ -21,9 +21,9 @@
 package org.codegist.crest.serializer.jackson;
 
 import org.codegist.crest.CRestConfig;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,10 +34,10 @@ final class JacksonFactory {
     static final String JACKSON_DESERIALIZER_CONFIG = "#deserializer-config";
     static final String JACKSON_SERIALIZER_CONFIG= "#serializer-config";
 
-    private static final Map<SerializationConfig.Feature, Boolean> DEFAULT_SERIALIZER_CONFIG = new HashMap<SerializationConfig.Feature, Boolean>();
-    private static final Map<DeserializationConfig.Feature, Boolean> DEFAULT_DESERIALIZER_CONFIG = new HashMap<DeserializationConfig.Feature, Boolean>();
+    private static final Map<SerializationFeature, Boolean> DEFAULT_SERIALIZER_CONFIG = new HashMap<SerializationFeature, Boolean>();
+    private static final Map<DeserializationFeature, Boolean> DEFAULT_DESERIALIZER_CONFIG = new HashMap<DeserializationFeature, Boolean>();
     static{
-        DEFAULT_DESERIALIZER_CONFIG.put(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        DEFAULT_DESERIALIZER_CONFIG.put(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     private JacksonFactory(){
@@ -54,13 +54,13 @@ final class JacksonFactory {
         
         mapper = new ObjectMapper();
 
-        Map<DeserializationConfig.Feature, Boolean> deserConfig = crestConfig.get(prefix + JACKSON_DESERIALIZER_CONFIG, DEFAULT_DESERIALIZER_CONFIG);
-        for(Map.Entry<DeserializationConfig.Feature,Boolean> feature : deserConfig.entrySet()){
+        Map<DeserializationFeature, Boolean> deserConfig = crestConfig.get(prefix + JACKSON_DESERIALIZER_CONFIG, DEFAULT_DESERIALIZER_CONFIG);
+        for(Map.Entry<DeserializationFeature,Boolean> feature : deserConfig.entrySet()){
             mapper.configure(feature.getKey(), feature.getValue());
         }
 
-        Map<SerializationConfig.Feature, Boolean> serConfig = crestConfig.get(prefix + JACKSON_SERIALIZER_CONFIG, DEFAULT_SERIALIZER_CONFIG);
-        for(Map.Entry<SerializationConfig.Feature,Boolean> feature : serConfig.entrySet()){
+        Map<SerializationFeature, Boolean> serConfig = crestConfig.get(prefix + JACKSON_SERIALIZER_CONFIG, DEFAULT_SERIALIZER_CONFIG);
+        for(Map.Entry<SerializationFeature,Boolean> feature : serConfig.entrySet()){
             mapper.configure(feature.getKey(), feature.getValue());
         }
 

@@ -20,11 +20,10 @@
 
 package org.codegist.crest.serializer.jackson;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.codegist.common.io.IOs;
 import org.codegist.crest.CRestConfig;
 import org.codegist.crest.serializer.Deserializer;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.type.TypeFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,14 +40,14 @@ public class JacksonDeserializer implements Deserializer {
     private static final String PREFIX = JacksonDeserializer.class.getName();
 
     /**
-     * <p>CRestConfig property to provide a custom jackson {@link org.codehaus.jackson.map.ObjectMapper} instance.</p>
+     * <p>CRestConfig property to provide a custom jackson {@link com.fasterxml.jackson.databind.ObjectMapper} instance.</p>
      * <p>Can be overridden by setting this property as follow:</p>
      * <code><pre>
      * ObjectMapper mapper = ...;
      * CRest crest = CRest.property(JacksonDeserializer.OBJECT_MAPPER_PROP, mapper).buid();
      * </pre></code>
      * <p>Default is auto-instantiated</p>
-     * <p>Expects a {@link org.codehaus.jackson.map.ObjectMapper} instance</p>
+     * <p>Expects a {@link com.fasterxml.jackson.databind.ObjectMapper} instance</p>
      */
     public static final String OBJECT_MAPPER_PROP = PREFIX + JacksonFactory.JACKSON_OBJECT_MAPPER;
 
@@ -60,7 +59,7 @@ public class JacksonDeserializer implements Deserializer {
      * CRest crest = CRest.property(JacksonDeserializer.JACKSON_DESERIALIZER_CONFIG_PROP, features).buid();
      * </pre></code>
      * <p>Default is auto-instantiated</p>
-     * <p>Expects a {@link java.util.Map}&lt;{@link org.codehaus.jackson.map.DeserializationConfig.Feature}, {@link java.lang.Boolean}&gt; instance</p>
+     * <p>Expects a {@link java.util.Map}&lt;{@link com.fasterxml.jackson.databind.DeserializationFeature}, {@link java.lang.Boolean}&gt; instance</p>
      */
     public static final String JACKSON_DESERIALIZER_CONFIG_PROP = PREFIX + JacksonFactory.JACKSON_DESERIALIZER_CONFIG;
 
@@ -78,7 +77,7 @@ public class JacksonDeserializer implements Deserializer {
      */
     public <T> T deserialize(Class<T> type, Type genericType, InputStream stream, Charset charset) throws IOException {
         try {
-            return jackson.<T>readValue(new InputStreamReader(stream, charset), TypeFactory.type(genericType));
+            return jackson.<T>readValue(new InputStreamReader(stream, charset), jackson.getTypeFactory().constructType(genericType));
         } finally {
             IOs.close(stream);
         }
