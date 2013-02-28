@@ -23,7 +23,7 @@ package org.codegist.crest.serializer.jackson;
 import org.codegist.crest.CRestConfig;
 import org.codegist.crest.param.Param;
 import org.codegist.crest.serializer.Serializer;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.OutputStream;
 import java.nio.charset.Charset;
