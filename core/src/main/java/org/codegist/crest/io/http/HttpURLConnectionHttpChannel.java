@@ -110,6 +110,14 @@ final class HttpURLConnectionHttpChannel implements HttpChannel {
                 return con.getInputStream();
             }
         }
+        
+        public String getHeaderField(String field) {
+            return con.getHeaderField(field);
+        }
+        
+        public Map<String, List<String>> getHeaderFields () {
+            return con.getHeaderFields();
+        }
 
         public String getContentType() {
             return con.getContentType();
